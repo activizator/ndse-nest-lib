@@ -10,6 +10,7 @@ export class BookService {
   constructor(@InjectModel('Book') private bookModel: Model<BookDocument>) {}
 
   async findAll(): Promise<Book[] | null> {
+    // throw new Error('err mess');
     return await this.bookModel.find().exec();
   }
 
