@@ -6,7 +6,10 @@ import {
   Delete,
   Body,
   Param,
+  UsePipes,
 } from '@nestjs/common';
+import { BookValidationPipe } from '../pipes/validator';
+import { updateBookSchema } from '../pipes/joiBookScheme';
 import { BookService } from './book.service';
 import { Book } from './interfaces/book.interface';
 import { IID } from './interfaces/id.interface';
@@ -21,6 +24,7 @@ export class BookController {
   }
 
   @Post()
+  @UsePipes(new BookValidationPipe(updateBookSchema))
   pushBook(@Body() book: Book): Promise<Book> {
     return this.bookService.create(book);
   }
