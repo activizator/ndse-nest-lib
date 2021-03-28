@@ -4,6 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BookModule } from './book/book.module';
+import { SignupModule } from './signup/signup.module';
+import { AuthModule } from './auth/auth.module';
 
 const BD = 'MyLibDB';
 
@@ -15,6 +17,8 @@ const BD = 'MyLibDB';
       { useFindAndModify: false },
     ),
     BookModule,
+    SignupModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
