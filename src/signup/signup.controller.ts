@@ -2,7 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { User } from './interfaces/user.interface';
 
-@Controller('api/signup')
+@Controller('/api/users/signup')
 export class SignupController {
   constructor(private readonly signupService: SignupService) {}
 
