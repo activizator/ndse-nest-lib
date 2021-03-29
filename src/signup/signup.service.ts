@@ -10,18 +10,28 @@ import { UserDocument } from './schemas/user.schema';
 export class SignupService {
   constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
-  async create(user: User): Promise<User | null> {
-    const { email, firstName, lastName } = user;
-    let { pass } = user;
+  async create(user: User): Promise<any> {
+    try {
+      const { email, firstName, lastName } = user;
+      let { pass } = user;
 
-    const salt = parseInt(process.env.SAULT);
-    pass = await bcrypt.hash(pass, salt);
+      const salt = parseInt(process.env.SAULT);
+      pass = await bcrypt.hash(pass, salt);
 
-    return await this.userModel.create({
-      email,
-      firstName,
-      lastName,
-      pass,
-    });
+      await this.userModel.create({
+        email,
+        firstName,
+        lastName,
+        pass,
+      });
+
+      return {
+        email,
+        firstName,
+        lastName,
+      };
+    } catch {
+      throw new Error('login is already in use');
+    }
   }
 }
