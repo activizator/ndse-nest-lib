@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AuthService } from '../auth/auth.service';
 import { Model } from 'mongoose';
-import { UserDocument } from '../auth/schemas/user.schema';
+import { UserDocument } from '../models/schemas/user.schema';
 
 @Injectable()
 export class JWTAuthGuard implements CanActivate {

@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { SignupService } from './signup.service';
-import { User } from './interfaces/user.interface';
+import { User } from '../models/interfaces/user.interface';
 
 @Controller('/api/users/signup')
 export class SignupController {
