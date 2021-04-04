@@ -1,5 +1,5 @@
 export interface BookComment {
-  id: number;
+  id?: string;
   bookId: string;
   comment: string;
 }

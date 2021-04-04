@@ -12,28 +12,26 @@ export class BookCommentService {
   ) {}
 
   async findAllBookComment(bId: string): Promise<BookComment[] | null> {
-    return await this.bookCommentModel.find({ bookId: bId });
+    return await this.bookCommentModel.find({ bookId: bId }).exec();
   }
 
   async create(comm: BookComment): Promise<BookComment | null> {
-    const { id, bookId, comment } = comm;
+    const { bookId, comment } = comm;
     return await this.bookCommentModel.create({
-      id,
       bookId,
       comment,
     });
   }
 
-  async read(i: number): Promise<BookComment | null> {
-    return await this.bookCommentModel.findOne({ id: i });
+  async read(id: string): Promise<BookComment | null> {
+    return await this.bookCommentModel.findById({ _id: id });
   }
 
-  async upsert(i: number, comm: BookComment): Promise<BookComment | null> {
-    const { id, bookId, comment } = comm;
+  async upsert(i: string, comm: BookComment): Promise<BookComment | null> {
+    const { bookId, comment } = comm;
     return await this.bookCommentModel.findOneAndUpdate(
-      { id: i },
+      { _id: i },
       {
-        id,
         bookId,
         comment,
       },
@@ -41,7 +39,7 @@ export class BookCommentService {
     );
   }
 
-  async delete(i: number): Promise<BookComment | null> {
-    return await this.bookCommentModel.findOneAndDelete({ id: i });
+  async delete(id: string): Promise<BookComment | null> {
+    return await this.bookCommentModel.findOneAndDelete({ _id: id });
   }
 }

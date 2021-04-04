@@ -3,18 +3,23 @@ import { Controller } from '@nestjs/common';
 import { BookCommentService } from './book.comment.service';
 import { BookComment } from './interfaces/book.comment.interface';
 
+@Controller('api/book/comments')
+export class BookCommentsController {
+  constructor(private readonly bookCommentService: BookCommentService) {}
+
+  @Get(':bookId')
+  getComments(@Param() bId): Promise<BookComment[]> {
+    return this.bookCommentService.findAllBookComment(bId.bookId);
+  }
+}
+
 @Controller('api/book/comment')
 export class BookCommentController {
   constructor(private readonly bookCommentService: BookCommentService) {}
 
-  @Get(':bookId')
-  getComments(@Param() bookId: string): Promise<BookComment[]> {
-    return this.bookCommentService.findAllBookComment(bookId);
-  }
-
   @Get(':id')
-  getComment(@Param() id: number): Promise<BookComment> {
-    return this.bookCommentService.read(id);
+  getComment(@Param() id): Promise<BookComment> {
+    return this.bookCommentService.read(id.id);
   }
 
   @Post()
@@ -24,14 +29,14 @@ export class BookCommentController {
 
   @Put(':id')
   upsertComment(
-    @Param() id: number,
+    @Param() id,
     @Body() comment: BookComment,
   ): Promise<BookComment> {
-    return this.bookCommentService.upsert(id, comment);
+    return this.bookCommentService.upsert(id.id, comment);
   }
 
   @Delete(':id')
-  deleteComment(@Param() id: number): Promise<BookComment> {
-    return this.bookCommentService.delete(id);
+  deleteComment(@Param() id): Promise<BookComment> {
+    return this.bookCommentService.delete(id.id);
   }
 }
