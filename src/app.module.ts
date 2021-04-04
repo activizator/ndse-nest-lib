@@ -7,6 +7,7 @@ import { BookModule } from './book/book.module';
 import { SignupModule } from './signup/signup.module';
 import { AuthModule } from './auth/auth.module';
 import { BookCommentModule } from './book.comment/book.comment.module';
+import { WsBookCommentModule } from './ws.book.comment/ws.book.comment.module';
 
 const BD = 'MyLibDB';
 
@@ -21,6 +22,7 @@ const BD = 'MyLibDB';
     SignupModule,
     AuthModule,
     BookCommentModule,
+    WsBookCommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
