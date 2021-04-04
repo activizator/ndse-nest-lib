@@ -28,8 +28,14 @@ export class BookCommentService {
   }
 
   async upsert(i: string, comm: BookComment): Promise<BookComment | null> {
-    const { bookId, comment } = comm;
-    return await this.bookCommentModel.findOneAndUpdate(
+    const { comment } = comm;
+    let { bookId } = comm;
+    if (!bookId) {
+      const c = await this.bookCommentModel.findOneAndDelete({ _id: i });
+      bookId = c.bookId;
+    }
+
+    await this.bookCommentModel.findOneAndUpdate(
       { _id: i },
       {
         bookId,
@@ -37,6 +43,7 @@ export class BookCommentService {
       },
       { upsert: true },
     );
+    return comm;
   }
 
   async delete(id: string): Promise<BookComment | null> {

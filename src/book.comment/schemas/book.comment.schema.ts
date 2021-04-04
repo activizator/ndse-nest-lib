@@ -5,7 +5,7 @@ export type BookCommentDocument = BookComment & Document;
 
 @Schema()
 export class BookComment {
-  @Prop({ required: true })
+  @Prop({})
   bookId: string;
 
   @Prop({})
