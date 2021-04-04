@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { BookModule } from './book/book.module';
 import { SignupModule } from './signup/signup.module';
 import { AuthModule } from './auth/auth.module';
+import { BookCommentModule } from './book.comment/book.comment.module';
 
 const BD = 'MyLibDB';
 
@@ -19,6 +20,7 @@ const BD = 'MyLibDB';
     BookModule,
     SignupModule,
     AuthModule,
+    BookCommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
