@@ -1,60 +1,3 @@
-// import {
-//   MessageBody,
-//   SubscribeMessage,
-//   WebSocketGateway,
-//   WebSocketServer,
-// } from '@nestjs/websockets';
-// import { Server } from 'socket.io';
-// import { BookCommentService } from 'src/book.comment/book.comment.service';
-// import { BookComment } from 'src/book.comment/interfaces/book.comment.interface';
-
-// @WebSocketGateway()
-// export class EventsGateway {
-//   constructor(private readonly bookCommentService: BookCommentService) {}
-
-//   @WebSocketServer()
-//   server: Server;
-
-//   @SubscribeMessage('events')
-//   getAllComments(@MessageBody() bookId): Promise<BookComment[]> {
-//     return this.bookCommentService.findAllBookComment(bookId.bookId);
-//   }
-
-//   @SubscribeMessage('identity')
-//   async identity(@MessageBody() data: number): Promise<number> {
-//     return data;
-//   }
-// }
-
-// import {
-//   MessageBody,
-//   SubscribeMessage,
-//   WebSocketGateway,
-//   WebSocketServer,
-//   WsResponse,
-// } from '@nestjs/websockets';
-// import { from, Observable } from 'rxjs';
-// import { map } from 'rxjs/operators';
-// import { Server } from 'socket.io';
-
-// @WebSocketGateway()
-// export class EventsGateway {
-//   @WebSocketServer()
-//   server: Server;
-
-//   @SubscribeMessage('events')
-//   findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-//     return from([1, 2, 3]).pipe(
-//       map((item) => ({ event: 'events', data: item })),
-//     );
-//   }
-
-//   @SubscribeMessage('identity')
-//   async identity(@MessageBody() data: number): Promise<number> {
-//     return data;
-//   }
-// }
-
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -64,20 +7,36 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
+import { BookCommentService } from '../book.comment/book.comment.service';
 
 @WebSocketGateway()
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private readonly bookCommentService: BookCommentService) {}
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void {
-    this.server.emit('msgToClient', payload);
+  @SubscribeMessage('msgToServer_getAllComments')
+  async getAllComments(client: Socket, payload): Promise<void> {
+    const bId: string = payload.text;
+    // 60327f2507cc172f7022bcca
+    const mess = await this.bookCommentService.findAllBookComment(bId);
+    this.server.emit('msgToClient', JSON.stringify(mess));
+  }
+
+  @SubscribeMessage('msgToServer_addComment')
+  async addComment(client: Socket, payload): Promise<void> {
+    const comment = JSON.parse(payload.text);
+    // {
+    //   "bookId": "60327f2507cc172f7022bcca",
+    //   "comment": "Комментарий 66"
+    // }
+    const mess = await this.bookCommentService.create(comment);
+    this.server.emit('msgToClient', 'added' + JSON.stringify(mess));
   }
 
   afterInit(server: Server) {
-    console.log('Init');
+    console.log('WS Init');
   }
 
   handleDisconnect(client: Socket) {
