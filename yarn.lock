@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@aginix/nestjs-firebase-admin@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@aginix/nestjs-firebase-admin/-/nestjs-firebase-admin-2.1.1.tgz#b2929b963b31578d98bed4072e03a2e4d4a33a5f"
+  integrity sha512-QyK5ATi1bVV3OEkVh07wPqivNJFo6VvRDGUmNnBZeoPMUjyPAN5yw7hfOF2TXX2VOWtbe3NhMWsethN+M1rP+g==
+  dependencies:
+    firebase-admin "^9.5.0"
+
 "@angular-devkit/core@11.2.0":
   version "11.2.0"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-11.2.0.tgz#a9198a391723e865fc6b369752c176cd5ed1d452"
@@ -3312,7 +3319,7 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^9.6.0:
+firebase-admin@^9.5.0, firebase-admin@^9.6.0:
   version "9.6.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-9.6.0.tgz#eabb0513f5aa0ebc473934669895d2a4d7e4e8a3"
   integrity sha512-GNrxsQsZ6alz9u+uYmX84qcixxYQnfOrByxVgEHWiCI9JSCbMOQ/1Px2A6+Coz5zzFokTgXsHnIg+Qz7hMlNZg==

@@ -11,31 +11,34 @@ import {
 import { BookValidationPipe } from '../pipes/validator';
 import { updateBookSchema } from '../pipes/joiBookScheme';
 import { BookService } from './book.service';
-import { Book } from './interfaces/book.interface';
-import { IID } from './interfaces/id.interface';
 
 @Controller('api/book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Get()
-  getBooks(): Promise<Book[]> {
+  getBooks(): Promise<any> {
     return this.bookService.findAll();
+  }
+
+  @Get(':id')
+  getBook(@Param() id): Promise<any> {
+    return this.bookService.read(id.id);
   }
 
   @Post()
   @UsePipes(new BookValidationPipe(updateBookSchema))
-  pushBook(@Body() book: Book): Promise<Book> {
+  pushBook(@Body() book: any): Promise<any> {
     return this.bookService.create(book);
   }
 
   @Put(':id')
-  upsertBook(@Param() id: IID, @Body() book: Book): Promise<Book> {
-    return this.bookService.upsert(id, book);
+  upsertBook(@Param() id, @Body() book: any): Promise<any> {
+    return this.bookService.update(id.id, book);
   }
 
   @Delete(':id')
-  deleteBook(@Param() id: IID): Promise<Book> {
-    return this.bookService.delete(id);
+  deleteBook(@Param() id): Promise<any> {
+    return this.bookService.delete(id.id);
   }
 }

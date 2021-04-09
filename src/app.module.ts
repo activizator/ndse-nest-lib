@@ -8,6 +8,8 @@ import { SignupModule } from './signup/signup.module';
 import { AuthModule } from './auth/auth.module';
 import { BookCommentModule } from './book.comment/book.comment.module';
 import { WsBookCommentModule } from './ws.book.comment/ws.book.comment.module';
+import { FirebaseAdminModule } from '@aginix/nestjs-firebase-admin';
+import * as admin from 'firebase-admin';
 
 const BD = 'MyLibDB';
 
@@ -18,6 +20,11 @@ const BD = 'MyLibDB';
       `mongodb+srv://${process.env.MDBUSER}:${process.env.MDBPASS}@cluster0.0isj7.azure.mongodb.net/${BD}?retryWrites=true&w=majority`,
       { useFindAndModify: false },
     ),
+    FirebaseAdminModule.forRootAsync({
+      useFactory: () => ({
+        credential: admin.credential.applicationDefault(),
+      }),
+    }),
     BookModule,
     SignupModule,
     AuthModule,

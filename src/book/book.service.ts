@@ -1,50 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Book } from './interfaces/book.interface';
-import { IID } from './interfaces/id.interface';
-import { BookDocument } from './schemas/book.schema';
+import { FirebaseDatabaseService } from '@aginix/nestjs-firebase-admin';
 
 @Injectable()
 export class BookService {
-  constructor(@InjectModel('Book') private bookModel: Model<BookDocument>) {}
+  constructor(private db: FirebaseDatabaseService) {}
 
-  async findAll(): Promise<Book[] | null> {
-    // throw new Error('err mess');
-    // throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    return await this.bookModel.find().exec();
+  async findAll(): Promise<any> {
+    const snapshot = await this.db.ref('MyLib').get();
+    return snapshot;
   }
 
-  async create(book: Book): Promise<Book | null> {
-    const { title, description, authors, favorite, fileCover, fileName } = book;
-    return await this.bookModel.create({
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-    });
+  async create(book: any): Promise<any> {
+    const res = await this.db.ref('MyLib').push(book);
+    const snapshot = await this.db.ref(res).get();
+    return snapshot;
   }
 
-  async upsert(id: IID, book: Book): Promise<Book | null> {
-    const { title, description, authors, favorite, fileCover, fileName } = book;
-    await this.bookModel.findOneAndUpdate(
-      { _id: id.id },
-      {
-        title,
-        description,
-        authors,
-        favorite,
-        fileCover,
-        fileName,
-      },
-      { upsert: true },
-    );
-    return book;
+  async read(id: string): Promise<any> {
+    const snapshot = await this.db.ref('MyLib').child(id).get();
+    return snapshot;
   }
 
-  async delete(id: IID): Promise<Book | null> {
-    return await this.bookModel.findByIdAndDelete({ _id: id.id });
+  async update(id: string, book: any): Promise<any> {
+    const snapshot = await this.db.ref('MyLib').child(id).update(book);
+    return snapshot;
+  }
+
+  async delete(id: string): Promise<any> {
+    const snapshot = await this.db.ref('MyLib').child(id).remove();
+    return snapshot;
   }
 }
